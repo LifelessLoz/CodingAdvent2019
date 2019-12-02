@@ -1,5 +1,5 @@
 /**
- * Advent of Code 2019, Day 1 - The Tyranny of the Rocket Equation
+ * Advent of Code 2019, Day 2 - 1202 Program Alarm
  *
  * Problem solved by - Lawrence Barraclough
  */
