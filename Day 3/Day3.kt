@@ -6,10 +6,8 @@ import kotlin.math.absoluteValue
 
 class Day3 (rawInput: List<String>){
     private val input: List<String> = rawInput
-    private val firstWire: List<Pair<Char, Int>> = input[0].split(",").map { it[0] to it.substring(1).toInt() }
-    private val secondWire: List<Pair<Char, Int>> = input[1].split(",").map { it[0] to it.substring(1).toInt() }
-    private val wirePoints1 = points(firstWire)
-    private val wirePoints2 = points(secondWire)
+    private val wirePoints1 = points(input[0].split(",").map { it[0] to it.substring(1).toInt() })
+    private val wirePoints2 = points(input[1].split(",").map { it[0] to it.substring(1).toInt() })
 
     private fun points(wireDirections: List<Pair<Char, Int>>): List<Pair<Int, Int>>{
         var x = 0
@@ -41,21 +39,19 @@ class Day3 (rawInput: List<String>){
     }
 
    private fun intersections(wire1s: List<Pair<Int, Int>>, wire2s: List<Pair<Int, Int>>): Pair<Int, Int> {
-        val distFromCenters = mutableListOf<Int>()
-        val intersectionDistance = mutableListOf<Int>()
+        val intersectionDistFromCenters = mutableListOf<Int>()
+        val intersectionTotalDistance = mutableListOf<Int>()
         for (wire1 in wire1s){
             if (wire2s.contains(wire1)){
-                distFromCenters.add(wire1.first.absoluteValue + wire1.second.absoluteValue)
+                intersectionDistFromCenters.add(wire1.first.absoluteValue + wire1.second.absoluteValue)
                 // Adding 2 to the intersection distance as Lists start on index 0
-                intersectionDistance.add(wire1s.indexOf(wire1) + wire2s.indexOf(wire1) + 2)
+                intersectionTotalDistance.add(wire1s.indexOf(wire1) + wire2s.indexOf(wire1) + 2)
             }
         }
-        return Pair(Collections.min(distFromCenters), Collections.min(intersectionDistance))
+        return Pair(Collections.min(intersectionDistFromCenters), Collections.min(intersectionTotalDistance))
     }
 
-    fun part1()= intersections(wirePoints1, wirePoints2).first
-
-    fun part2()= intersections(wirePoints1, wirePoints2).second
+    fun answer()= intersections(wirePoints1, wirePoints2)
 }
 
 fun readFile(fileName: String): List<String>
@@ -63,8 +59,7 @@ fun readFile(fileName: String): List<String>
 
 fun main(){
     val fileName = "C:\\Users\\lawre\\IdeaProjects\\Advent of code\\src\\Day3\\Input.txt"
-    val output = Day3(readFile(fileName)).part1()
-    print(output)
-    val output2 = Day3(readFile(fileName)).part2()
-    print(output2)
+    val answer = Day3(readFile(fileName)).answer()
+    println(answer.first)
+    println(answer.second)
 }
