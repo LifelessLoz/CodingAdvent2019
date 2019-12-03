@@ -11,9 +11,7 @@ import java.lang.Exception
 
 class Day2 (rawInput: String) {
     private val inputs: List<Int> = rawInput.split(",").map { it.toInt() }
-    private var input = inputs.toMutableList()
-    private val targetNumber = 19690720
-    private var nounVerbInput = 0
+    var input = inputs.toMutableList()
 
     fun part1(): Int {
         input[1] = 12
@@ -32,6 +30,8 @@ class Day2 (rawInput: String) {
     }
 
     fun part2(): Int {
+        val targetNumber = 19690720
+        var nounVerbInput = 0
         start@ for(noun in 0..100) {
             for (verb in 0..100) {
                 input = inputs.toMutableList()
@@ -63,8 +63,7 @@ fun readFile(fileName: String)
         = File(fileName).inputStream().readBytes().toString(Charsets.UTF_8)
 
 fun main(){
-    val output = Day2(readFile("C:\\Users\\lawre\\IdeaProjects\\Advent of code\\src\\Day2\\Input.txt")).part1()
-    println(output)
-    val output2 = Day2(readFile("C:\\Users\\lawre\\IdeaProjects\\Advent of code\\src\\Day2\\Input.txt")).part2()
-    println(output2)
+    var fileName = "C:\\Users\\lawre\\IdeaProjects\\Advent of code\\src\\Day2\\Input.txt"
+    println(Day2(readFile(fileName)).part1())
+    println(Day2(readFile(fileName)).part2())
 }
