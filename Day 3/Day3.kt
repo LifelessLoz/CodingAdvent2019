@@ -1,6 +1,7 @@
 package Day3
 
 import java.io.File
+import java.lang.Exception
 import java.util.*
 import kotlin.math.absoluteValue
 
@@ -32,7 +33,7 @@ class Day3 (rawInput: List<String>){
                     y--
                     wirePoints.add(element = Pair(x , y))
                 }
-                else -> println("Error direction not found")
+                else -> throw Exception("Direction not found!")
             }
         }
         return wirePoints
