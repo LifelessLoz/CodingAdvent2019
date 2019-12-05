@@ -1,3 +1,9 @@
+/**
+ * Advent of Code 2019, Day 3 - Crossed Wires
+ *
+ * Problem solved by - Lawrence Barraclough
+ */
+
 package Day3
 
 import java.io.File
