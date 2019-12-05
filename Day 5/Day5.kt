@@ -69,18 +69,15 @@ class Day2 (rawInput: String) {
 
     private fun parameters(decider: Int): Int{
         var output = 0
-        if (decider == 1) {
-            output = if (input[i] / 100 % 10 == 1){
-                input[i + decider]
-            } else
-                input[input[i + decider]]
-        }
-        if (decider == 2) {
-            output = if (input[i] / 1000 % 10 == 1){
-                input[i + decider]
-            } else
-                input[input[i+ decider]]
-        }
+        var divideBy = 0
+        if (decider == 1)
+            divideBy = 100
+        if (decider == 2)
+            divideBy = 1000
+        output = if (input[i] / divideBy % 10 == 1){
+            input[i + decider]
+        } else
+            input[input[i + decider]]
         return output
     }
 }
