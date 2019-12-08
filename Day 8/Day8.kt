@@ -8,15 +8,6 @@ package Day8
 
 import java.io.File
 
-class Day8 (rawInput: String, height: Int, width: Int){
-    private val h = height
-    private val w = width
-    private val input = rawInput.chunked(width*height)
-    private var output = CharArray(width*height) {'3'}
-
-    fun answer() = Pair(part1(input), part2(input, w, h, output))
-}
-
 fun part1(input: List<String>): Int{
     return input.minBy { it -> it.count() {it=='0'} }?.let { it -> it.count() {it=='1'} * it.count() {it=='2'} }!!
 }
@@ -29,7 +20,7 @@ fun part2(input: List<String>, w: Int, h: Int, output: CharArray): String{
             }
         }
     }
-    return output.map { if(it == '1') 'X' else ' '}.chunked(25).map { it.joinToString("") }.joinToString("\n")
+    return output.map { if (it == '1') 'X' else ' ' }.chunked(25).joinToString("\n") { it.joinToString("") }
 }
 
 fun readFile(fileName: String): String
@@ -37,7 +28,12 @@ fun readFile(fileName: String): String
 
 fun main(){
     val fileName = "C:\\Users\\lawre\\IdeaProjects\\Advent of code\\src\\Day8\\Input.txt"
-    val answer = Day8(readFile(fileName), 6, 25).answer()
+    val height = 6
+    val width = 25
+    val input = readFile(fileName).chunked(width*height)
+    var output = CharArray(width*height) {'3'}
+
+    val answer = Pair(part1(input), part2(input, width, height, output))
     println(answer.first)
     println(answer.second)
 }
