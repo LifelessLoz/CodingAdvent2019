@@ -1,10 +1,10 @@
 /**
- * Advent of Code 2019, Day 9 - Amplification Circuit
+ * Advent of Code 2019, Day 9 - Sensor Boost
  *
  * Problem solved by - Lawrence Barraclough
 */
+
 package Day9
-import Day7.IntcodeState
 import java.io.File
 import java.lang.Exception
 import kotlin.math.pow
@@ -14,12 +14,12 @@ enum class IntcodeState{
 }
 
 class Day9 (val input: LongArray) {
-    var memTest = LongArray(10000) {0}
-    var currentState: IntcodeState = IntcodeState.Halted
+    private var memTest = LongArray(10000) {0}
+    var currentState = IntcodeState.Halted
     var numInput = mutableListOf<Long>()
 
-    var i = 0
-    var b = 0
+    private var i = 0
+    private var b = 0
     var output = mutableListOf<Long>()
 
     operator fun get(address: Int) = memTest[address]
@@ -28,9 +28,9 @@ class Day9 (val input: LongArray) {
     }
 
     init {
-        input?.copyInto(memTest)
+        input.copyInto(memTest)
     }
-    var memory = memTest.toMutableList()
+    private var memory = memTest.toMutableList()
 
     private fun arg(i: Int, b: Int, n: Int): Int =
         when (val mode = memory[i].toInt() / 10.0.pow((n + 1).toDouble()).toInt() % 10) {
@@ -56,7 +56,7 @@ class Day9 (val input: LongArray) {
         }
     }
 
-    fun pointer() {
+    private fun pointer() {
         when (memory[i].toInt() % 100){
             1 -> {
                 memory[i, b, 3] = memory[i, b, 1] + memory[i, b, 2]
@@ -131,7 +131,7 @@ fun readFile(fileName: String)
 fun main(){
     val fileName = "C:\\Users\\lawre\\IdeaProjects\\Advent of code\\src\\Day9\\Input.txt"
 
-    var memInput = readFile(fileName).split(",").map { it.toLong() }.toLongArray()
+    val memInput = readFile(fileName).split(",").map { it.toLong() }.toLongArray()
 
     val computer1 = Day9(memInput)
     computer1.numInput.add(1L)
