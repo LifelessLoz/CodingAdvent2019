@@ -1,3 +1,9 @@
+/**
+ * Advent of Code 2019, Day 7 - Amplification Circuit
+ *
+ * Problem solved by - Lawrence Barraclough
+ */
+
 package Day7
 
 import java.io.File
@@ -9,12 +15,12 @@ enum class IntcodeState{
 }
 
 class Day7 (val input: LongArray) {
-    var memTest = LongArray(10000) {0}
-    var currentState: IntcodeState = IntcodeState.Halted
+    private var memTest = LongArray(10000) {0}
+    var currentState = IntcodeState.Halted
     var numInput = mutableListOf<Long>()
 
-    var i = 0
-    var b = 0
+    private var i = 0
+    private var b = 0
     var output = mutableListOf<Long>()
 
     operator fun get(address: Int) = memTest[address]
@@ -23,9 +29,9 @@ class Day7 (val input: LongArray) {
     }
 
     init {
-        input?.copyInto(memTest)
+        input.copyInto(memTest)
     }
-    var memory = memTest.toMutableList()
+    private var memory = memTest.toMutableList()
 
     private fun arg(i: Int, b: Int, n: Int): Int =
         when (val mode = memory[i].toInt() / 10.0.pow((n + 1).toDouble()).toInt() % 10) {
@@ -51,7 +57,7 @@ class Day7 (val input: LongArray) {
         }
     }
 
-    fun pointer() {
+    private fun pointer() {
         when (memory[i].toInt() % 100){
             1 -> {
                 memory[i, b, 3] = memory[i, b, 1] + memory[i, b, 2]
@@ -120,7 +126,7 @@ class amplifier(val rawInput: String, val input: List<Long>, repeat: Boolean){
     private val amps: List<Day7>
     var output = mutableListOf<Long>()
     private val intcodeInput = rawInput.split(",").map { it.toLong() }.toLongArray()
-    var numInput = input.toMutableList()
+    private val numInput = input.toMutableList()
 
     init {
         amps = arrayListOf (Day7(intcodeInput),
@@ -177,8 +183,8 @@ fun main(){
 
     val intList1 = mutableListOf(0L,1,2,3,4)
     val intList2 = mutableListOf(5L,6,7,8,9)
-    var part1 = mutableListOf<List<Long>>()
-    var part2 = mutableListOf<List<Long>>()
+    val part1 = mutableListOf<List<Long>>()
+    val part2 = mutableListOf<List<Long>>()
     heapsAlgorithm(intList1.size, intList1, part1)
     heapsAlgorithm(intList2.size, intList2, part2)
 
