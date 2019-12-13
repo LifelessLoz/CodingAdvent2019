@@ -12,22 +12,23 @@ class Day9 (rawInput: String, val numInput: MutableList<Long>) {
     private val inputs: List<Long> = rawInput.split(",").map { it.toLong() }
     var input = inputs.toLongArray()
     var memTest = LongArray(10000) {0}
+
     operator fun get(address: Int) = memTest[address]
     operator fun set(address: Int, value: Long) {
         memTest[address] = value
     }
+
     init {
         input?.copyInto(memTest)
     }
     var memory = memTest.toMutableList()
-
 
     private fun arg(i: Int, b: Int, n: Int): Int =
         when (val mode = memory[i].toInt() / 10.0.pow((n + 1).toDouble()).toInt() % 10) {
             0 -> memory[i + n].toInt()
             1 -> i + n
             2 -> b + memory[i + n].toInt()
-            else -> error("bad mode $mode")
+            else -> error("Cannot recognise mode : $mode")
         }
 
     private operator fun List<Long>.get(i: Int, b: Int, n: Int): Long =
