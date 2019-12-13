@@ -4,14 +4,23 @@
  * Problem solved by - Lawrence Barraclough
 */
 package Day9
+import Day7.IntcodeState
 import java.io.File
 import java.lang.Exception
 import kotlin.math.pow
 
-class Day9 (rawInput: String, val numInput: MutableList<Long>) {
-    private val inputs: List<Long> = rawInput.split(",").map { it.toLong() }
-    var input = inputs.toLongArray()
+enum class IntcodeState{
+    Running, Halted, Terminated
+}
+
+class Day9 (val input: LongArray) {
     var memTest = LongArray(10000) {0}
+    var currentState: IntcodeState = IntcodeState.Halted
+    var numInput = mutableListOf<Long>()
+
+    var i = 0
+    var b = 0
+    var output = mutableListOf<Long>()
 
     operator fun get(address: Int) = memTest[address]
     operator fun set(address: Int, value: Long) {
@@ -47,66 +56,71 @@ class Day9 (rawInput: String, val numInput: MutableList<Long>) {
         }
     }
 
-    fun pointer(): List<Long> {
-        var i = 0
-        var b = 0
-        var output = mutableListOf<Long>()
-        var running = true
-        while (running) {
-            when (memory[i].toInt() % 100){
-                1 -> {
-                    memory[i, b, 3] = memory[i, b, 1] + memory[i, b, 2]
-                    i += 4
-                }
-                2 -> {
-                    memory[i, b, 3] = memory[i, b, 1] * memory[i, b, 2]
-                    i += 4
-                }
-                3 -> {
-                    if (numInput.isNotEmpty()) {
-                        memory[i, b, 1] = numInput[0]
-                        numInput.removeAt(0)
-                    }
-                    i += 2
-                }
-                4 -> {
-                    output.add(memory[i, b, 1])
-                    i += 2
-                }
-                5 -> {
-                    if(memory[i, b, 1] != 0L)
-                        i = memory[i, b, 2].toInt()
-                    else
-                        i += 3
-                }
-                6 -> {
-                    if(memory[i, b, 1] == 0L)
-                        i = memory[i, b, 2].toInt()
-                    else
-                        i += 3
-                }
-                7 -> {
-                    if(memory[i, b, 1] < memory[i, b, 2])
-                        memory[i, b, 3] = 1
-                    else
-                        memory[i, b, 3] = 0
-                    i += 4
-                }
-                8 -> {
-                    if(memory[i, b, 1] == memory[i, b, 2])
-                        memory[i, b, 3] = 1
-                    else
-                        memory[i, b, 3] = 0
-                    i += 4
-                }
-                9 -> {
-                    b += memory[i, b, 1].toInt()
-                    i += 2
-                }
-                99 -> return output
-                else -> throw Exception("Error, Unexpected Value!")
+    fun pointer() {
+        when (memory[i].toInt() % 100){
+            1 -> {
+                memory[i, b, 3] = memory[i, b, 1] + memory[i, b, 2]
+                i += 4
             }
+            2 -> {
+                memory[i, b, 3] = memory[i, b, 1] * memory[i, b, 2]
+                i += 4
+            }
+            3 -> {
+                if (numInput.isNotEmpty()) {
+                    memory[i, b, 1] = numInput[0]
+                    numInput.removeAt(0)
+                    currentState = IntcodeState.Running
+                    i += 2
+                }
+                else currentState = IntcodeState.Halted
+            }
+            4 -> {
+                output.add(memory[i, b, 1])
+                i += 2
+            }
+            5 -> {
+                if(memory[i, b, 1] != 0L)
+                    i = memory[i, b, 2].toInt()
+                else
+                    i += 3
+            }
+            6 -> {
+                if(memory[i, b, 1] == 0L)
+                    i = memory[i, b, 2].toInt()
+                else
+                    i += 3
+            }
+            7 -> {
+                if(memory[i, b, 1] < memory[i, b, 2])
+                    memory[i, b, 3] = 1
+                else
+                    memory[i, b, 3] = 0
+                i += 4
+            }
+            8 -> {
+                if(memory[i, b, 1] == memory[i, b, 2])
+                    memory[i, b, 3] = 1
+                else
+                    memory[i, b, 3] = 0
+                i += 4
+            }
+            9 -> {
+                b += memory[i, b, 1].toInt()
+                i += 2
+            }
+            99 -> {
+                currentState = IntcodeState.Terminated
+                i += 1
+            }
+            else -> throw Exception("Error, Unexpected Value!")
         }
+    }
+
+    fun runIntcode(): MutableList<Long>{
+        currentState = IntcodeState.Running
+        while (currentState == IntcodeState.Running)
+            pointer()
         return output
     }
 }
@@ -116,8 +130,16 @@ fun readFile(fileName: String)
 
 fun main(){
     val fileName = "C:\\Users\\lawre\\IdeaProjects\\Advent of code\\src\\Day9\\Input.txt"
-    var input1 = MutableList(1){1L}
-    var input2 = MutableList(1){2L}
-    println(Day9(readFile(fileName),input1).pointer())
-    println(Day9(readFile(fileName),input2).pointer())
+
+    var memInput = readFile(fileName).split(",").map { it.toLong() }.toLongArray()
+
+    val computer1 = Day9(memInput)
+    computer1.numInput.add(1L)
+    computer1.runIntcode()
+    println(computer1.output)
+
+    val computer2 = Day9(memInput)
+    computer2.numInput.add(2L)
+    computer2.runIntcode()
+    println(computer2.output)
 }
