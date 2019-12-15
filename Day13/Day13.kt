@@ -126,18 +126,17 @@ class Day13 (val input: LongArray) {
     }
 }
 
-class arcadeGame(gameInput: LongArray){
+class ArcadeGame(gameInput: LongArray){
     var score   = 0L
-    var ballX   = 0L
-    var paddleX  = 0L
-
-    val game = Day13(gameInput)
+    private var ballX   = 0L
+    private var paddleX  = 0L
+    private val game = Day13(gameInput)
 
     init {
         game.memory[0] = 2
     }
 
-    fun grid(){
+    private fun grid(){
         game.output.chunked(3).forEach{ pointer ->
             if (pointer[0] == -1L && pointer[1] == 0L) score = pointer[2]
             if (pointer[2] == 3L) paddleX = pointer[0]
@@ -170,7 +169,7 @@ fun main(){
     }
     println(blockCount)
 
-    val part2 = arcadeGame(memInput)
+    val part2 = ArcadeGame(memInput)
     part2.runGame()
     println(part2.score)
 }
