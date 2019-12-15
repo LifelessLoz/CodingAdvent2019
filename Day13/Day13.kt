@@ -149,11 +149,7 @@ class arcadeGame(gameInput: LongArray){
         do {
             game.runIntcode()
             grid()
-            if (game.currentState == IntcodeState.Halted) {
-                game.numInput.add(
-                    ballX.compareTo(paddleX).toLong()
-                )
-            }
+            if (game.currentState == IntcodeState.Halted) game.numInput.add(ballX.compareTo(paddleX).toLong())
         } while (game.currentState != IntcodeState.Terminated)
     }
 }
